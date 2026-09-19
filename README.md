@@ -43,7 +43,7 @@ Hosted (api.premiselabs.co) and self-hosted (Docker, FalkorDB) scored identicall
 
 ## Baseline
 
-`vault_baseline.sh` asks the same 12 questions of a plain markdown notes folder through `qmd` (BM25 + vector). Hit means the corrected rule's keyword appears in the result. Top-5: 9/12. Top-1: 5/12. Tortoise r4 top-1: 9/12.
+`vault_baseline.sh` asks the same 12 questions of a plain markdown notes folder through `qmd` (BM25 + vector). Hit means the corrected rule's keyword appears in the result. Top-5: 9/12. Top-1: 5/12. Tortoise r4 top-1: 9/12. Those counts include the one case replaced before publishing; the logs mark it `n/a`.
 
 Caveat: the notes folder held about 250 pages of unrelated text; the graph held about 50 points. Part of the gap is scale.
 
