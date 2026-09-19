@@ -1,0 +1,148 @@
+[
+ {
+  "id": "fanout",
+  "question": "how many subagents can I run concurrently in Claude Code",
+  "chain": [
+   "Never spawn more than ~5 concurrent subagents in Claude Code — rate-limit backstop (measured lesson).",
+   "Claude Code subagent fan-out has no invented cap: real limits are CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS (default 20, excess queues), Workflow min(16, cores-2), and 200 per session."
+  ],
+  "evidence": [
+   "code.claude.com/docs/en/sub-agents documents no concurrency cap; only 200 per session total, and says to spawn multiple subagents simultaneously.",
+   "A local fan-out log records 6, 10 and 8 concurrent subagents with no rate-limit incident (2026-07-22)."
+  ],
+  "vault_kw": "CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS"
+ },
+ {
+  "id": "fable",
+  "question": "is Fable a real selectable model or just a prompting disposition",
+  "chain": [
+   "Fable is a disposition only — the Fable model was removed; 'use fable' just injects FABLE_PLAYBOOK.md.",
+   "claude-fable-5 is a real selectable model and the pinned default in settings.json; it must be listed in availableModels or the pin silently falls back to Opus. Fable is ALSO a disposition."
+  ],
+  "evidence": [
+   "settings.json availableModels contains claude-fable-5 and model is pinned to it (re-added 2026-07-01)."
+  ],
+  "vault_kw": "availableModels"
+ },
+ {
+  "id": "sonnet46",
+  "question": "which model should I pass for search and explore subagents",
+  "chain": [
+   "Use Sonnet 4.6 (claude-sonnet-4-6) for search/explore subagents because Opus 4.7 nerfed search.",
+   "Pass the alias model:\"sonnet\" (scouts: \"haiku\") for search/explore subagents; claude-sonnet-4-6 and claude-opus-4-7 are gone from availableModels and a pinned unavailable id silently falls back."
+  ],
+  "evidence": [
+   "availableModels on 2026-07-18 contains neither claude-sonnet-4-6 nor claude-opus-4-7; lineup is Fable 5 / Opus 4.8 / Sonnet 5 / Haiku 4.5."
+  ],
+  "vault_kw": "alias"
+ },
+ {
+  "id": "indexhook",
+  "question": "do I need to re-index the notes search index manually after writing to the notes folder",
+  "chain": [
+   "After writing to the notes folder by shell or scripts, run the re-index yourself — the PostToolUse hook only sees Write/Edit tool calls.",
+   "No manual re-index is needed: a FileChanged hook driven by a filesystem watcher re-indexes the notes search index on any on-disk change under the folder (verified 2026-09-05).",
+   "The notes-index auto-update is DISABLED as of 2026-09-09; re-index MANUALLY after writing to the notes folder."
+  ],
+  "evidence": [
+   "The watchPaths SessionStart hook was the root cause of an editor input-freeze bug: FSEventStreamStart blocked 1-2 min on the iCloud-synced notes folder while holding a lock the main thread needed (2026-09-09)."
+  ],
+  "vault_kw": "DISABLED"
+ },
+ {
+  "id": "icloud",
+  "question": "how does the notes folder sync to the iCloud mobile copy",
+  "chain": [
+   "The notes folder mirrors to iCloud with rsync -a --delete, one-way canonical→iCloud; never edit the iCloud copy, it gets overwritten.",
+   "The notes folder syncs bidirectionally with iCloud using unison, with conflict detection; edits from either side propagate."
+  ],
+  "evidence": [
+   "The operator caught that rsync --delete would silently destroy a useful edit made only on the phone (2026-08-13)."
+  ],
+  "vault_kw": "unison"
+ },
+ {
+  "id": "watcher",
+  "question": "is the launchd iCloud-mirror watcher still running",
+  "chain": [
+   "The launchd iCloud-mirror watcher was retired and unloaded on 2026-08-13.",
+   "The launchd iCloud-mirror watcher was still LOADED with two watch-script processes on 2026-09-09; it is now actually stopped. A retirement is not real until launchctl list says so."
+  ],
+  "evidence": [
+   "launchctl list on 2026-09-09 showed the iCloud-mirror watcher loaded with two running watch-script processes."
+  ],
+  "vault_kw": "launchctl"
+ },
+ {
+  "id": "ctx",
+  "question": "what is the context window of Opus 4.6",
+  "chain": [
+   "Opus 4.6 has a 200K context window (the model self-reports 200K).",
+   "Opus 4.6 has a 1M token context window (GA since 2026-03-13); never trust model self-introspection for token limits."
+  ],
+  "evidence": [
+   "Anthropic API docs list 1M context for Opus 4.6, GA 2026-03-13."
+  ],
+  "vault_kw": "1M"
+ },
+ {
+  "id": "spawn",
+  "question": "what is the correct syntax to spawn a teammate agent in Claude Code",
+  "chain": [
+   "Spawn teammates with Task(subagent_type=..., team_name=\"{project}-clawd\", ...) after TeamCreate.",
+   "Since Claude Code v2.1.178 teams are implicit: TeamCreate/TeamDelete were removed; spawn teammates directly with Agent(subagent_type=..., name=...)."
+  ],
+  "evidence": [
+   "Claude Code v2.1.178 changelog removed TeamCreate/TeamDelete and made teams implicit."
+  ],
+  "vault_kw": "implicit"
+ },
+ {
+  "id": "genobj",
+  "question": "is generateObject still available in Vercel AI SDK 6",
+  "chain": [
+   "generateObject was removed in Vercel AI SDK 6; use generateText with Output.object.",
+   "generateObject is DEPRECATED but not removed in Vercel AI SDK 6 — it still works; migrate to generateText + Output.object({schema})."
+  ],
+  "evidence": [
+   "Context7 query of the ai-sdk v6 docs shows generateObject marked deprecated with a migration note, not removed."
+  ],
+  "vault_kw": "DEPRECATED"
+ },
+ {
+  "id": "gtimeout",
+  "question": "how do I run a command with a timeout on this Mac",
+  "chain": [
+   "macOS has no timeout command; use gtimeout instead.",
+   "macOS has no timeout and no gtimeout either unless coreutils is installed; implement the timeout in bash (background + sleep/kill)."
+  ],
+  "evidence": [
+   "which gtimeout returned nothing on the Mac; coreutils is not installed."
+  ],
+  "vault_kw": "coreutils"
+ },
+ {
+  "id": "automerge",
+  "question": "does gh pr merge --auto wait for CI on a private free-plan repo",
+  "chain": [
+   "gh pr merge --auto queues the merge until the required checks pass.",
+   "gh pr merge --auto merges IMMEDIATELY when the repo has no required checks — a private repo on the free plan cannot have any, so it is not a CI gate there."
+  ],
+  "evidence": [
+   "The merge landed seconds after --auto on a free-plan private repo with zero required checks configured."
+  ],
+  "vault_kw": "IMMEDIATELY"
+ },
+ {
+  "id": "mythos",
+  "question": "is the Mythos-class model available to me",
+  "chain": [
+   "Mythos is not accessible: all API paths 404, Bedrock allowlisted only.",
+   "RESOLVED 2026-06-09: Fable 5 (claude-fable-5) is the public Mythos-class model, GA on the Max plan."
+  ],
+  "evidence": [
+   "claude-fable-5 responded to a live --output-format json probe on the Max plan (2026-06-09)."
+  ],
+  "vault_kw": "Fable"
+ }
+]

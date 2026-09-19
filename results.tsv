@@ -1,0 +1,9 @@
+commit	metric	mem_mb	status	description
+4578c86	16	3.17	keep	round0 naive: statements only, no edges
+6d5bda8	8	5.25	keep	round1 invalidate chain + promote corrected
+r2	12	6.33	discard	round2 evidence IMPL->corrected calibrated (worse: evidence outranks rule)
+83cd09d	4	5.25	keep	round3 r1 + corrected credibility=high
+3861a07	3	6.33	keep	round4 r3 + IMPL evidence->corrected default prior (3/3/3 vs r3 4/5/5)
+r5	3	6.33	discard	round5 kind=decision (equal, within noise)
+r6	4.3	4.17	discard	round6 evidence as props only (5/4/4 — worse; IMPL structure helps)
+r7	2.7	7.42	discard	round7 r4 + promote evidence (3/3/2 vs 3/3/3 — no separation, +17% calls)
