@@ -1,12 +1,12 @@
 MISS	CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS	how many subagents can I run concurrently in Claude Code
 MISS	availableModels	is Fable a real selectable model or just a prompting disposition
 MISS	alias	which model should I pass for search and explore subagents
-MISS	DISABLED	do I need to re-index qmd manually after writing to the vault
-HIT	unison	how does the vault sync to the iCloud mobile copy
-HIT	launchctl	is the launchd vault-icloud-mirror watcher still running
+MISS	DISABLED	do I need to re-index the notes search index manually after writing to the notes folder
+HIT	unison	how does the notes folder sync to the iCloud mobile copy
+HIT	launchctl	is the launchd iCloud-mirror watcher still running
 MISS	1M	what is the context window of Opus 4.6
-HIT	implicit	what is the correct syntax to spawn a codeclawd teammate
+HIT	implicit	what is the correct syntax to spawn a teammate agent in Claude Code
 HIT	DEPRECATED	is generateObject still available in Vercel AI SDK 6
 MISS	coreutils	how do I run a command with a timeout on this Mac
-HIT	codeclawd	what is the name of the two-founder agency brand
+n/a	IMMEDIATELY	does gh pr merge --auto wait for CI on a private free-plan repo
 MISS	Fable	is the Mythos-class model available to me
